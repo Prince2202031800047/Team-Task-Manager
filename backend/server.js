@@ -29,18 +29,18 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 // =======================
-// Test routes
+// Health route
 // =======================
 app.get("/health", (req, res) => {
   res.send("OK");
 });
 
 // =======================
-// 🔥 FRONTEND SERVE (IMPORTANT)
+// 🔥 FRONTEND SERVE (FIXED)
 // =======================
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
 });
 
