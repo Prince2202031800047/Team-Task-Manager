@@ -51,7 +51,7 @@ app.get("*", (req, res) => {
   }
   res.sendFile(path.join(frontendPath, "index.html"));
 });
-
+console.log("Frontend Path:", frontendPath);
 // =======================
 // MongoDB
 // =======================
