@@ -42,10 +42,8 @@ app.get("/health", (req, res) => {
 // ✅ Absolute path fix (Railway safe)
 const frontendPath = path.resolve(__dirname, "../frontend/dist");
 
-// serve static files
 app.use(express.static(frontendPath));
 
-// fallback (React routing)
 app.use((req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
