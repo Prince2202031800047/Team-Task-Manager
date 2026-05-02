@@ -39,12 +39,16 @@ app.get("/health", (req, res) => {
 // 🔥 FRONTEND SERVE (FINAL FIX)
 // =======================
 
-// ✅ Absolute path fix (Railway safe)
 const frontendPath = path.resolve(__dirname, "../frontend/dist");
 
+// Serve static files
 app.use(express.static(frontendPath));
 
-app.use((req, res) => {
+// IMPORTANT: only for non-API routes
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({ message: "API route not found" });
+  }
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
