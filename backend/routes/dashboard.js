@@ -3,28 +3,36 @@ const router = express.Router();
 const Task = require("../models/Task");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Dashboard stats
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    // 🔥 ALL TASKS (no filter)
-    const tasks = await Task.find();
+    let query = {};
 
-    const total = tasks.length;
+    // 🔥 Member → only their tasks
+    if (req.user.role !== "Admin") {
+      query.assignedTo = req.user.id;
+    }
 
- const completed = tasks.filter(t => t.status.toLowerCase() === "completed").length;
- const pending = tasks.filter(t => t.status.toLowerCase() === "pending").length;
- const inProgress = tasks.filter(t => t.status.toLowerCase() === "in progress").length;
+    const tasks = await Task.find(query);
 
-    const overdue = tasks.filter(t =>
-      t.dueDate && new Date(t.dueDate) < new Date() && t.status !== "completed"
+    const totalTasks = tasks.length;
+
+    const completed = tasks.filter(t => t.status === "Done").length;
+    const inProgress = tasks.filter(t => t.status === "In Progress").length;
+    const todo = tasks.filter(t => t.status === "To Do").length;
+
+    const overdue = tasks.filter(
+      t =>
+        t.dueDate &&
+        new Date(t.dueDate) < new Date() &&
+        t.status !== "Done"
     ).length;
 
     res.json({
-      total,
+      totalTasks,
       completed,
-      pending,
       inProgress,
-      overdue
+      todo,
+      overdue,
     });
 
   } catch (err) {

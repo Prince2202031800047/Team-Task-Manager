@@ -1,39 +1,22 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
-import { Grid, Paper, Typography } from "@mui/material";
 
 export default function Dashboard() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    API.get("/api/dashboard")
-      .then(res => setData(res.data))
-      .catch(err => console.log(err));
+    API.get("/api/dashboard").then(res => setData(res.data));
   }, []);
 
   return (
     <div style={{ padding: 20 }}>
-      <Typography variant="h4">Dashboard</Typography>
+      <h2>Dashboard</h2>
 
-      <Grid container spacing={3} style={{ marginTop: 20 }}>
-        <Grid item xs={4}>
-          <Paper style={{ padding: 20 }}>
-            Total Tasks: {data.totalTasks}
-          </Paper>
-        </Grid>
-
-        <Grid item xs={4}>
-          <Paper style={{ padding: 20 }}>
-            Completed: {data.completed}
-          </Paper>
-        </Grid>
-
-        <Grid item xs={4}>
-          <Paper style={{ padding: 20 }}>
-            Overdue: {data.overdue}
-          </Paper>
-        </Grid>
-      </Grid>
+      <p>Total: {data.totalTasks}</p>
+      <p>Done: {data.completed}</p>
+      <p>In Progress: {data.inProgress}</p>
+      <p>To Do: {data.todo}</p>
+      <p>Overdue: {data.overdue}</p>
     </div>
   );
 }
