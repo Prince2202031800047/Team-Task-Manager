@@ -36,13 +36,18 @@ app.get("/health", (req, res) => {
 });
 
 // =======================
-// 🔥 FRONTEND SERVE (FIXED)
+// 🔥 FRONTEND SERVE (FINAL FIX)
 // =======================
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// ✅ Absolute path fix (Railway safe)
+const frontendPath = path.resolve(__dirname, "../frontend/dist");
 
+// serve static files
+app.use(express.static(frontendPath));
+
+// fallback (React routing)
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 // =======================
